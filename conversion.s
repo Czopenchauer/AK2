@@ -14,17 +14,28 @@
 # r9 - zapisuje adres rsi
 # r10 - zapisuje adres rdx
 # r11 - licznik petli
-produkt:
+# r12 - wczytana liczba z tablicy N
+
+conversion:
     push %rbp
     mov %rsp, %rbp
-    # zapisuje rejestry
+    # kopiuje adresy
     movq %rdi, %r8
     movq %rsi, %r9
     movq %rdx, %r10
     xor %r11, %r11
-
 petla:
-    
+    xor %rax, %rax
+    xor %rdx, %rdx
+    # odczytuje N
+    movq (%r9, %r11, 8), %r12
+    cmp $0, %r12 # jesli N jest 0 to znaczy ze skonczyly sie liczby/ koniec tablicy N
+    jz koniec
+    movq (%r10), %rax
+    div %r12
+    movq %rdx, (%r8, %r11, 8)
+    inc %r11
+    jmp petla
 koniec:
 
 pop %rbp
