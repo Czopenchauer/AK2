@@ -1,5 +1,7 @@
-all: produkt
-produkt: produkt.c produkt.s
-	gcc -ggdb produkt.s produkt.c -o produkt
+all: main
+main: main.c produkt.s conversion.s
+	gcc -ggdb conversion.s produkt.s main.c -o main
 clear:
-	rm produkt
+	rm main
+r:
+	./main
