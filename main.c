@@ -5,28 +5,19 @@ long long N[6] = {0};
 long long first[6] = {0};
 long long second[6] = {0};
 
-void produkt(long long *one, long long *N, long long *primeNumber);
-void conversion(long long *tab, long long *N, long long *num);
+// funkcja zwraca produkt
+unsigned long long produkt(long long *number, long long *N, long long *primeNumber);
+void conversion(long long *modulo, long long *N, long long *num);
+long long toInt(long long *number, long long *N, long long *pro);
 
 // ZAKLADAM ZE TYLKO DLA DODATNICH
 int main(){
-    long long *pNum = primeNumber, *pN = N, *firstPtr = first, *secondPtr = second;
-    long long fi, sec;
-    scanf("%lld %lld", &fi, &sec);
-
-    // na podstawie wiekszej liczby obliczamy produkt
-    long long *chosen = NULL;
-    if(fi > sec)
-        chosen = &fi;
-    else
-        chosen = &sec;
-
-    produkt(chosen, pN, pNum);
-    conversion(firstPtr, pN, &fi);
-    conversion(secondPtr, pN, &sec);
-
+    long long fi = 123;
+    long long *chosen = &fi;
+    unsigned long long pro = produkt(chosen, N, primeNumber);
+    printf("Produkt to:%lld\n", pro);
     printf("Tablica N to:\n");
-    for(int i = 0; i < 6; i++)
-        printf("%lld\n", first[i]);
+    for(int i = 0; i < 7; i++)
+        printf("%lld\n", N[i]);
     return 0;
 }
