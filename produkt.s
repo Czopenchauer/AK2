@@ -4,7 +4,7 @@
 # Funkcja oblicza produkt tj. znajduje takie liczby pierwsze, ktorych iloczyn jest wiekszy
 # wiekszy od liczby zamienianej.
 
-# ARGUMENTY:
+# VARIABLE:
 # r13 - liczba zamieniana
 # r14 - tablica N
 # r15 - tablica z liczbami pierwszymi
@@ -88,6 +88,58 @@ produkt:
         jae koniec
         jmp petla_zew
 koniec:
+
+# A TERAZ MNIE WYPIERDOL
+# VARIABLE:
+# r8  - wartosc 'i' z petli powyzej
+# r9  - licznik petli
+# r11 - produkt
+xor %r9, %r9
+petla_wy:
+    cmp %r8, %r9                 # k < i
+    jae finnaly
+    movq (%r14, %r9, 8), %rbx    # wczytuje N[k]
+    movq (%r15, %r9, 8), %rcx    # wczytuje primeNumber[k]
+    cmpq %rbx, %rcx              # if(N[k] != primeNumber[k])
+    je entire                    # jesli nie jest to spelnione to probujemy wywalic cala liczbe a nie tylko potege                       
+    movq %r11, %rax              # produkt do rax
+    div %rcx                     # produkt /= primeNumber[k]
+    cmpq (%r13), %rax            # if(produkt < number)
+    jb multiply                  # jesli tak to przywroc produkt i zakoncz
+    movq %rax, %r11              # zapisz produkt
+    movq (%r14, %r9, 8), %rax    # wczytuje N[k]
+    div %rcx                     # N[k] /= primeNumber[k]
+    movq %rax, (%r14, %r9, 8)    # zapisuje N[k]
+    jmp petla_wy                 # i kolejny obiek
+    # przed jmp powinno byc zwiekszenie licznika inc %r9
+    # ale w tym ifie rowniez zmiejszamy licznik wiec nie robie tego
+    multiply:
+        mul %rcx
+        movq %rax, %r11
+        jmp finnaly
+    entire:
+        movq %r11, %rax              # laduje produkt do rax
+        movq (%r14, %r9, 8), %rbx    # wczytuje N[k]
+        div %rbx                     # produkt /= N[k]
+        inc %r9
+        cmpq (%r13), %rax            # if (produkt >= number)
+        jb petla_wy
+        dec %r9
+        movq %rax, %r11              # zapisuje produkt
+        movq $0, (%r14, %r9, 8)      # N[k] = 0
+        movq %r9, %r10
+        inc %r9 # zwiekszam licznik petla_wy
+        smol:
+            cmp $19, %r10             # s < 19
+            jbe petla_wy
+            inc %r10
+            movq (%r14, %r10, 8), %rbx # wczytuje N[s + 1]
+            dec %r10
+            movq %rbx, (%r14, %r10, 8) # N[s] = N[s+ 1]
+            inc %r10
+            jmp smol
+            
+finnaly:
 movq %r11, %rax
 
 pop %r15
