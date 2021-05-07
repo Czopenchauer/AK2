@@ -97,7 +97,7 @@ koniec:
 xor %r9, %r9
 petla_wy:
     cmp %r8, %r9                 # k < i
-    jae finnaly
+    jae finally
     movq (%r14, %r9, 8), %rbx    # wczytuje N[k]
     movq (%r15, %r9, 8), %rcx    # wczytuje primeNumber[k]
     cmpq %rbx, %rcx              # if(N[k] != primeNumber[k])
@@ -116,7 +116,7 @@ petla_wy:
     multiply:
         mul %rcx
         movq %rax, %r11
-        jmp finnaly
+        jmp finally
     entire:
         movq %r11, %rax              # laduje produkt do rax
         movq (%r14, %r9, 8), %rbx    # wczytuje N[k]
@@ -130,8 +130,8 @@ petla_wy:
         movq %r9, %r10
         inc %r9 # zwiekszam licznik petla_wy
         smol:
-            cmp $19, %r10             # s < 19
-            jbe petla_wy
+            cmp $19, %r10            # s < 19
+            jae petla_wy
             inc %r10
             movq (%r14, %r10, 8), %rbx # wczytuje N[s + 1]
             dec %r10
@@ -139,7 +139,7 @@ petla_wy:
             inc %r10
             jmp smol
             
-finnaly:
+finally:
 movq %r11, %rax
 
 pop %r15

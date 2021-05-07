@@ -5,56 +5,71 @@ long long primeNumber[18] = { 2, 3, 5, 7, 11 ,13 ,17 ,19 ,23 ,29 ,31 ,37 ,41 ,43
 long long N[18] = { 0 };
 
 int main(){
-    long long number = 333L;
+    long long number = 3333333333333L;
     unsigned long long produkt = 1L;
-    scanf("%lld", &number);
     // bierzemy liczbe pierwsza
     // czy istnieje jakas wczesniejsza pierwsza ktora podniesiona do potegi bedzie mniejsza obecnej
     // jesli tak to bierzemy ja i mnozymy przez nia produkt
-    int i = 0, fuck = 0;
-    for(i; i < 18; i++) {   
+    int i = 0, done = 0;
+    for(i; i < 18; i++) {
+        if(produkt >= number)
+            break;
+        done = 0;
         for(int j = 0; j < i; j++){   
             long long cur = primeNumber[j]; 
-            while(cur < primeNumber[i]){ 
+            while(cur <= primeNumber[i]){ 
                 cur *= primeNumber[j]; 
             }
             cur /= primeNumber[j]; 
-            if (cur != primeNumber[j]){
+            if (cur != primeNumber[j] && cur != N[j]){
                 produkt /= N[j];
                 N[j] = cur;                 
-                produkt *= cur;
+                produkt *= N[j];
                 i--;
-                fuck++;
+                done = 1;
                 if(produkt >= number){
                     break;
                 }
-                continue;
             }
         }
-        N[i + fuck] = primeNumber[i + fuck]; // 5 na pozycje 3
-        produkt *= primeNumber[i + fuck];
-        if(produkt >= number){
-            break;
+        
+        if(done == 0){
+            N[i] = primeNumber[i];
+            produkt *= primeNumber[i];
+            if(produkt >= number){
+                break;
+            } 
         }
     }
-    // 18 480
-    // TERAZ TRZEBA WYJEBAC
-    i += fuck;
-    for(i ; i > 0; i--) {
-        produkt /= N[i];
-        long long kek = N[i];
+
+    for(int k = 0 ; k < i; k++) {
+        // sprawdzamy czy N[i] jest podniesione do potegi
+        // jesli tak to probujemy pozbyc sie jednej potegi
+        
+        if(N[k] != primeNumber[k]){
+            produkt /= primeNumber[k];
+            if(produkt < number){
+                produkt *= primeNumber[k];
+                break;
+            }
+            N[k] /= primeNumber[k];
+            k--;
+            continue;
+        }       
+        produkt /= N[k];
         if(produkt >= number){
-            N[i] = 0;
-            // wykonuje do momentu az natrafimy na 0 w tablicy
-            for(int k = 0; k < 18; k++){
-                N[i + k] = N[i+ k + 1]; 
+            N[k] = 0;
+            for(int s = k; s < 19; s++){
+                N[s] = N[s+ 1];
             }
             continue;
         }
-        produkt *= kek;
+        produkt *= N[k];
     }
-    printf("Produkt kocie to : %lld \n", produkt);
-    for(int i = 0; i < 18; i++)
-        printf("%lld, ", N[i]);
+    printf("Produkt to:%lld\n", produkt);
+    printf("Tablica N to:\n");
+    for(int i = 0; i < 19; i++)
+        printf("%lld\n", N[i]);
     return 0; // number = 123 
+    
 }
