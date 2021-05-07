@@ -7,7 +7,7 @@ long long second[18] = { 0 };
 
 // funkcja zwraca produkt
 unsigned long long produkt(long long *number, long long *N, long long *primeNumber);
-void conversion(long long *modulo, long long *N, long long *num);
+void toRNS(long long *modulo, long long *N, long long *num);
 long long toInt(long long *number, long long *N, long long *pro);
 
 // ZAKLADAM ZE TYLKO DLA DODATNICH
@@ -17,7 +17,7 @@ int main(){
     long long fi = 203;
     long long *chosen = &fi;
     unsigned long long pro = produkt(chosen, N, primeNumber);
-    conversion(first, N, chosen);
+    toRNS(first, N, chosen);
     long long *ptr = &pro;
     int a = toInt(first, N, ptr);
     // // toINT
@@ -43,7 +43,9 @@ int main(){
     //         }            
     //     }
     // }
-    
-    printf("FAFA %d\n", a);
+    for(int i = 0; i < 5; i ++){
+        printf("%lld, ", N[i]);
+    }
+    printf("Produkt to: %lld\ntoInt to: %d\n", pro, a);
 
 }

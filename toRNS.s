@@ -1,5 +1,5 @@
 .text
-.global conversion
+.global toRNS
 
 # Funkcja zamienia liczbe podana jako argument na system RNS poprzez dzielenie jej
 # przez kolejne liczby z tablicy N. Nastepnie reszte z dzielenia zapisuje w tablicy.
@@ -16,7 +16,7 @@
 # r11 - licznik petli
 # r12 - wczytana liczba z tablicy N
 
-conversion:
+toRNS:
     push %rbp
     mov %rsp, %rbp
     # kopiuje adresy
