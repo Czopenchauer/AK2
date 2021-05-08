@@ -12,7 +12,7 @@
 # r10 - produkt rdx
 # r11 - licznik petli
 # r12 - wczytana liczba z tablicy N
-# r13 - licznik petli (bruh)
+# r13 - licznik petli (j)
 # rcx - suma
 # rbx - bufor
 
@@ -30,7 +30,7 @@ toInt:
 
     xor %r11, %r11
     xor %rcx, %rcx
-    petla:
+    petla:                          # petla for(int i = 0; N[i] != 0; i++)
         cmpq $0, (%r9, %r11, 8)     # N[i] != 0
         je break
         xor %rdx, %rdx           
@@ -39,36 +39,36 @@ toInt:
         div %rbx                    # produkt / N[i]
         movq %rax, %rsi             # zapisuje produkt / N[i]
         xor %rdx, %rdx
-        div %rbx                    # kek % N[i]       
+        div %rbx                    # temp % N[i]       
         cmp $1, %rdx                # reszta (rdx) == 1
         jne else
         movq %rsi, %rax             # wczytuje produkt / N[i]
         movq (%r8, %r11, 8), %rbx   # first[i]
-        mul %rbx                    # kek * first[i]
+        mul %rbx                    # temp * first[i]
         add %rax, %rcx              # dodaje iloczyn do sumy
         inc %r11                    # i++
         jmp petla
         else:
             movq $2, %r13
-            smol:
-                cmpq %r13, (%r9, %r11, 8)   # bruh <= N[i]
+            smol:                           # petla for(int j = 2; j <= N[i]; j++)
+                cmpq %r13, (%r9, %r11, 8)   # j <= N[i]
                 jb petla
                 xor %rdx, %rdx
                 movq (%r9, %r11, 8), %rbx   # pobiera N[i]
                 movq (%r10), %rax           # pobiera produkt
                 div %rbx                    # produkt /= N[i]
                 xor %rdx, %rdx                  
-                mul %r13                    # kek *= bruh
+                mul %r13                    # temp *= j
                 xor %rdx, %rdx                
                 movq %rax, %rsi
-                div %rbx                    # kek % N[i]
+                div %rbx                    # temp % N[i]
                 inc %r13
-                cmp $1, %rdx                # kek % N[i] == 1
+                cmp $1, %rdx                # temp % N[i] == 1
                 jne smol
                 movq %rsi, %rax
                 movq (%r8, %r11, 8), %rbx   # first[i]
                 xor %rdx, %rdx
-                mul %rbx                    # kek *= first[i]
+                mul %rbx                    # temp *= first[i]
                 add %rax, %rcx              # dodaj do sumy
                 inc %r11
                 jmp petla

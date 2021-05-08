@@ -30,33 +30,31 @@ produkt:
 
     movq $1, %r11   # produkt = 1
     xor %r8, %r8    # i = 0
-    petla_zew:
+    petla_zew:                          # petla for(i; i < 18; i++)
         cmpq (%r13), %r11               # if (produkt >= number)
         jae koniec 
         xor %r9, %r9                    # done = 0
         xor %r10, %r10                  # j = 0
-        petla_krzyk:
+        petla_wew:
             cmp %r8, %r10                 # j < i
-            # jb petla_zew
-            jae FUCK
+            jae else
             movq (%r15, %r10, 8), %rbx  # cur = primeNumber[j]; 
             movq %rbx, %rax             # cur to rax
-            while_pow:                  # while(cur <= primeNumber[i])
-                                        #   cur *= primeNumber[j]
-                mul %rbx
+            while_pow:                  # while(cur <= primeNumber[i])                                       
+                mul %rbx                #   cur *= primeNumber[j]
                 cmpq %rax, (%r15, %r8, 8)
                 ja while_pow
             xor %rdx, %rdx
             div %rbx                    # cur /= primeNumber[j];
             inc %r10
             cmpq %rax, %rbx             # cur (rax) != primeNumber[j] (rbx)
-            je petla_krzyk
+            je petla_wew
             dec %r10
             clc
             movq (%r14, %r10, 8), %rcx
             inc %r10                   
             cmpq %rax, %rcx             # if (cur != N[j])
-            je petla_krzyk
+            je petla_wew
             dec %r10
             xor %rdx, %rdx
             movq %rax, %rbx             # w rax jest cur^ wiec przerzucam go do rbx
@@ -69,10 +67,10 @@ produkt:
             dec %r8
             mov $1, %r9                 # done = 1
             inc %r10                    # j++
-            cmp (%r13), %r11             # produkt >= number
+            cmp (%r13), %r11            # produkt >= number
             jae koniec
-            jmp petla_krzyk
-        FUCK:
+            jmp petla_wew
+        else:
         inc %r8
         # _if(done == 0)
         cmp $1, %r9
@@ -89,19 +87,21 @@ produkt:
         jmp petla_zew
 koniec:
 
-# A TERAZ MNIE WYPIERDOL
+# Teraz staramy sie zmniejszyc otrzymany iloczyn.
+# Robimy to przez likwidacje potegi (jesli byla) lub usuniecia liczby calkowicie.
+
 # VARIABLE:
 # r8  - wartosc 'i' z petli powyzej
 # r9  - licznik petli
 # r11 - produkt
 xor %r9, %r9
-petla_wy:
+petla_wy:                        # for(int k = 0 ; k < i; k++)
     cmp %r8, %r9                 # k < i
     jae finally
     movq (%r14, %r9, 8), %rbx    # wczytuje N[k]
     movq (%r15, %r9, 8), %rcx    # wczytuje primeNumber[k]
     cmpq %rbx, %rcx              # if(N[k] != primeNumber[k])
-    je entire                    # jesli nie jest to spelnione to probujemy wywalic cala liczbe a nie tylko potege                       
+    je entire                    # jesli nie jest to spelnione to probujemy usunac cala liczbe a nie tylko potege                       
     movq %r11, %rax              # produkt do rax
     div %rcx                     # produkt /= primeNumber[k]
     cmpq (%r13), %rax            # if(produkt < number)
@@ -110,13 +110,13 @@ petla_wy:
     movq (%r14, %r9, 8), %rax    # wczytuje N[k]
     div %rcx                     # N[k] /= primeNumber[k]
     movq %rax, (%r14, %r9, 8)    # zapisuje N[k]
-    jmp petla_wy                 # i kolejny obiek
-    # przed jmp powinno byc zwiekszenie licznika inc %r9
-    # ale w tym ifie rowniez zmiejszamy licznik wiec nie robie tego
+    jmp petla_wy                 # i kolejny obieg
+
     multiply:
         mul %rcx
         movq %rax, %r11
         jmp finally
+
     entire:
         movq %r11, %rax              # laduje produkt do rax
         movq (%r14, %r9, 8), %rbx    # wczytuje N[k]
@@ -129,7 +129,7 @@ petla_wy:
         movq $0, (%r14, %r9, 8)      # N[k] = 0
         movq %r9, %r10
         inc %r9 # zwiekszam licznik petla_wy
-        smol:
+        smol:                        # petla for(int s = k; s < 19; s++)
             cmp $19, %r10            # s < 19
             jae petla_wy
             inc %r10

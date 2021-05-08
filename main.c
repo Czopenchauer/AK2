@@ -9,40 +9,25 @@ long long second[18] = { 0 };
 unsigned long long produkt(long long *number, long long *N, long long *primeNumber);
 void toRNS(long long *modulo, long long *N, long long *num);
 long long toInt(long long *number, long long *N, long long *pro);
+void addRNS(long long *first, long long *second, long long *N);
+void subRNS(long long *first, long long *second, long long *N);
 
-// ZAKLADAM ZE TYLKO DLA DODATNICH
-// potencjal wyjebania:
-// W produkt petla smol. Czemu? Byc moze indeksy s i k beda wychodzic poza zakres
 int main(){
     long long fi = 203;
-    long long *chosen = &fi;
+    long long sec = 14;
+    //scanf("%lld %lld", &fi, &sec);
+    long long temp = fi + sec;
+    long long *chosen = &temp;
+
     unsigned long long pro = produkt(chosen, N, primeNumber);
+    chosen = &fi;
     toRNS(first, N, chosen);
+    chosen = &sec;
+    toRNS(second, N, chosen);
+    subRNS(first, second, N);
     long long *ptr = &pro;
     int a = toInt(first, N, ptr);
-    // // toINT
-    // unsigned long long sum = 0;
-    // for(int i = 0; N[i] != 0; i++){
-    //     // okreslanie wagi pozycji
-    //     // produkt /= N[i]
-    //     int kek = pro / N[i];
-    //     // czy kek % N[i] == 1
-    //     if (kek % N[i] == 1){
-    //         sum += kek * first[i];
-    //         continue;
-    //     }
-    //     else {
-    //         //
-    //         for(int bruh = 2; bruh <= N[i]; bruh++){
-    //             int kek = pro / N[i];
-    //             kek *= bruh;
-    //             if(kek % N[i] == 1){
-    //                 sum += kek * first[i];
-    //                 continue; // bruh++
-    //             }
-    //         }            
-    //     }
-    // }
+
     for(int i = 0; i < 5; i ++){
         printf("%lld, ", N[i]);
     }

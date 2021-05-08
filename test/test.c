@@ -7,6 +7,31 @@ long long N[18] = { 0 };
 int main(){
     long long number = 3333333333333L;
     unsigned long long produkt = 1L;
+
+    // // toINT
+    // unsigned long long sum = 0;
+    // for(int i = 0; N[i] != 0; i++){
+    //     // okreslanie wagi pozycji
+    //     // produkt /= N[i]
+    //     int temp = pro / N[i];
+    //     // czy temp % N[i] == 1
+    //     if (temp % N[i] == 1){
+    //         sum += temp * first[i];
+    //         continue;
+    //     }
+    //     else {
+    //         //
+    //         for(int j = 2; j <= N[i]; j++){
+    //             int temp = pro / N[i];
+    //             temp *= j;
+    //             if(temp % N[i] == 1){
+    //                 sum += temp * first[i];
+    //                 continue; // j++
+    //             }
+    //         }            
+    //     }
+    // }
+
     // bierzemy liczbe pierwsza
     // czy istnieje jakas wczesniejsza pierwsza ktora podniesiona do potegi bedzie mniejsza obecnej
     // jesli tak to bierzemy ja i mnozymy przez nia produkt
@@ -43,9 +68,6 @@ int main(){
     }
 
     for(int k = 0 ; k < i; k++) {
-        // sprawdzamy czy N[i] jest podniesione do potegi
-        // jesli tak to probujemy pozbyc sie jednej potegi
-        
         if(N[k] != primeNumber[k]){
             produkt /= primeNumber[k];
             if(produkt < number){
@@ -70,6 +92,6 @@ int main(){
     printf("Tablica N to:\n");
     for(int i = 0; i < 19; i++)
         printf("%lld\n", N[i]);
-    return 0; // number = 123 
+    return 0;
     
 }
