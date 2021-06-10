@@ -35,7 +35,7 @@ toInt:
         je break
         xor %rdx, %rdx           
         movq (%r9, %r11, 8), %rbx   # N[i]
-        movq (%r10), %rax           # produkt
+        movq %r10, %rax           # produkt
         div %rbx                    # produkt / N[i]
         movq %rax, %rsi             # zapisuje produkt / N[i]
         xor %rdx, %rdx
@@ -55,7 +55,7 @@ toInt:
                 jb petla
                 xor %rdx, %rdx
                 movq (%r9, %r11, 8), %rbx   # pobiera N[i]
-                movq (%r10), %rax           # pobiera produkt
+                movq %r10, %rax           # pobiera produkt
                 div %rbx                    # produkt /= N[i]
                 xor %rdx, %rdx                  
                 mul %r13                    # temp *= j
@@ -74,7 +74,7 @@ toInt:
                 jmp petla
 break:
 movq %rcx, %rax
-movq (%r10), %rbx
+movq %r10, %rbx
 xor %rdx, %rdx
 div %rbx
 movq %rdx, %rax

@@ -18,6 +18,7 @@
 
 addRNS:
     push %rbp
+    push %r12
     mov %rsp, %rbp
     mov %rdi, %r8
     mov %rsi, %r9
@@ -37,5 +38,6 @@ petla:
     jmp petla
 
 koniec:
+pop %r12
 pop %rbp
 ret

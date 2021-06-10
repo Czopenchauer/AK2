@@ -31,7 +31,7 @@ produkt:
     movq $1, %r11   # produkt = 1
     xor %r8, %r8    # i = 0
     petla_zew:                          # petla for(i; i < 18; i++)
-        cmpq (%r13), %r11               # if (produkt >= number)
+        cmpq %r13, %r11               # if (produkt >= number)
         jae koniec 
         xor %r9, %r9                    # done = 0
         xor %r10, %r10                  # j = 0
@@ -67,7 +67,7 @@ produkt:
             dec %r8
             mov $1, %r9                 # done = 1
             inc %r10                    # j++
-            cmp (%r13), %r11            # produkt >= number
+            cmp %r13, %r11            # produkt >= number
             jae koniec
             jmp petla_wew
         else:
@@ -82,7 +82,7 @@ produkt:
         mul %rbx                        # produkt *= primeNumber[i]
         movq %rax, %r11                 # zapisanie wymnozonego produktu w r11
         inc %r8                         # i++
-        cmpq (%r13), %r11               # produkt >= number
+        cmpq %r13, %r11               # produkt >= number
         jae koniec
         jmp petla_zew
 koniec:
@@ -104,7 +104,7 @@ petla_wy:                        # for(int k = 0 ; k < i; k++)
     je entire                    # jesli nie jest to spelnione to probujemy usunac cala liczbe a nie tylko potege                       
     movq %r11, %rax              # produkt do rax
     div %rcx                     # produkt /= primeNumber[k]
-    cmpq (%r13), %rax            # if(produkt < number)
+    cmpq %r13, %rax            # if(produkt < number)
     jb multiply                  # jesli tak to przywroc produkt i zakoncz
     movq %rax, %r11              # zapisz produkt
     movq (%r14, %r9, 8), %rax    # wczytuje N[k]
@@ -122,7 +122,7 @@ petla_wy:                        # for(int k = 0 ; k < i; k++)
         movq (%r14, %r9, 8), %rbx    # wczytuje N[k]
         div %rbx                     # produkt /= N[k]
         inc %r9
-        cmpq (%r13), %rax            # if (produkt >= number)
+        cmpq %r13, %rax            # if (produkt >= number)
         jb petla_wy
         dec %r9
         movq %rax, %r11              # zapisuje produkt

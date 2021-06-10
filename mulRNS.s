@@ -1,7 +1,7 @@
 .text
-.global subRNS
+.global mulRNS
 
-# Funkcja odejmuje dwie liczby zapisane w systemie RNS.
+# Funkcja mnozy dwie liczby zapisane w systemie RNS.
 # Wynik jest zapisany w liczbie pierwszej.
 
 # Funkcja dostaje trzy argumenty:
@@ -16,7 +16,7 @@
 # r11 - licznik petli
 # r12 - wczytana liczba z tablicy N
 
-subRNS:
+mulRNS:
     push %rbp
     push %r12
     mov %rsp, %rbp
@@ -25,24 +25,17 @@ subRNS:
     mov %rdx, %r10
     xor %r11, %r11
 petla:
-    clc
     movq (%r10, %r11, 8), %r12      # wykonujemy petle do momentu N[i] == 0
     cmp $0, %r12
     jz koniec
     xor %rdx, %rdx
     movq (%r8, %r11, 8), %rax       # liczba pierwsza
     movq (%r9, %r11, 8), %rcx       # liczba druga
-    sub %rcx, %rax
-    cmp $0, %rax
-    jl make_positive
-continue:
-    movq %rax, (%r8, %r11, 8)
+    mulq %rcx
+    div %r12
+    movq %rdx, (%r8, %r11, 8)
     inc %r11
     jmp petla
-
-make_positive:
-addq %r12, %rax
-jmp continue
 
 koniec:
 pop %r12

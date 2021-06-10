@@ -23,6 +23,7 @@ toRNS:
     movq %rdi, %r8
     movq %rsi, %r9
     movq %rdx, %r10
+    movq %rcx, %r13
     xor %r11, %r11
     push %r12
 petla:
@@ -32,7 +33,7 @@ petla:
     movq (%r9, %r11, 8), %r12
     cmp $0, %r12 # jesli N jest 0 to znaczy ze skonczyly sie liczby/ koniec tablicy N
     jz koniec
-    movq (%r10), %rax
+    movq %r10, %rax
     div %r12
     movq %rdx, (%r8, %r11, 8)
     inc %r11
