@@ -18,6 +18,8 @@
 
 toRNS:
     push %rbp
+    push %r12
+    push %r13
     mov %rsp, %rbp
     # kopiuje adresy
     movq %rdi, %r8
@@ -25,7 +27,6 @@ toRNS:
     movq %rdx, %r10
     movq %rcx, %r13
     xor %r11, %r11
-    push %r12
 petla:
     xor %rax, %rax
     xor %rdx, %rdx
@@ -39,6 +40,26 @@ petla:
     inc %r11
     jmp petla
 koniec:
+clc
+cmpq $1, %r13
+je end
+xor %r11, %r11
+complement:
+    clc
+    xor %rax, %rax
+    xor %rdx, %rdx
+    # odczytuje N
+    movq (%r9, %r11, 8), %r12
+    movq (%r8, %r11, 8), %r13
+    cmp $0, %r12 # jesli N jest 0 to znaczy ze skonczyly sie liczby/ koniec tablicy N
+    jz end
+    sub %r13, %r12
+    movq %r12, (%r8, %r11, 8)
+    inc %r11
+    jmp complement
+
+end:
+pop %r13
 pop %r12
 pop %rbp
 ret

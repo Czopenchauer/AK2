@@ -36,36 +36,56 @@ long long estimateResult(int first, int second, char type){
 }
 
 unsigned long long produkt(long long number, long long *N, long long *primeNumber);
-void toRNS(long long *modulo, long long *N, long long num);
+void toRNS(long long *modulo, long long *N, long long num, int sign);
 long long toInt(long long *number, long long *N, long long pro);
 void addRNS(long long *first, long long *second, long long *N);
 void subRNS(long long *first, long long *second, long long *N);
 void mulRNS(long long *first, long long *second, long long *N);
 
 int main(){
-    int fi = 1;
-    int sec = 0;
+    int fi = 1, sec = 1, sign = 1, sign2 = 1;
     char type = '+';
     printf("Podaj liczby oraz dzialanie (znak +/*)\n");
-    scanf("%d %d %c", &fi, &sec, &type);
-    long long maks = estimateResult(fi,sec,type);
-    unsigned long long pro = produkt(maks, N, primeNumber);
-    toRNS(first, N, fi);
-    toRNS(second, N, sec);
+    scanf("%d %d %c", &fi, &sec, &type);    
+    int smallest = 0;
+    if(fi < 0 && sec < 0){
+        smallest = fi + sec;
+        fi *= -1, sec *= -1, sign = -1, sign2 = -1;
+    }
+    else if(fi < 0){
+        smallest = fi;
+        fi *= -1;
+        sign = -1;
+    }
+    else if(sec < 0){
+        smallest = sec;
+        sec *= -1;
+        sign2 = -1;
+    }
+    unsigned long long pro = produkt(estimateResult(fi,sec,type), N, primeNumber);
+    long long range = pro + smallest;
+    long long minRange = smallest, maxRange = range;
+    toRNS(first, N, fi, sign);
+    toRNS(second, N, sec, sign2);
     switch(type){
         case '+':
             addRNS(first, second, N);
-        break;
+            break;
         case '-':
             subRNS(first, second, N);
-        break;
+            break;
         case '*':
+            if(sign == -1 || sign2 == -1) {
+                range = -pro;
+                minRange = range;
+                maxRange = 0;
+            }
             mulRNS(first, second, N);
-        break;
+            break;
     }
-    long long a = toInt(first, N, pro);
-    printf("Maksymalny wynik dzialania: %lld\n"
-            "Zakres dynamiczny: %lld"
+    long long result = toInt(first, N, pro);
+    result = result > range ? result - pro : result;
+    printf( "Produkt N: %lld\nZakres dynamiczny: <%lld, %lld>"
             "\nDzialanie: %d %c %d = %lld\n"
-            ,maks, pro, fi, type, sec, a);
+            ,pro, minRange, maxRange, fi * sign, type, sec * sign2, result);
 }
