@@ -45,7 +45,7 @@ void mulRNS(long long *first, long long *second, long long *N);
 int main(){
     int fi = 1, sec = 1, sign = 1, sign2 = 1;
     char type = '+';
-    printf("Podaj liczby oraz dzialanie (znak +/*)\n");
+    printf("Podaj liczby oraz dzialanie (znak +-*)\n");
     scanf("%d %d %c", &fi, &sec, &type);    
     int smallest = 0;
     if(fi < 0 && sec < 0){
@@ -64,7 +64,7 @@ int main(){
     }
     unsigned long long pro = produkt(estimateResult(fi,sec,type), N, primeNumber);
     long long range = pro + smallest;
-    long long minRange = smallest, maxRange = range;
+    long long minRange = smallest, maxRange = range;   
     toRNS(first, N, fi, sign);
     toRNS(second, N, sec, sign2);
     switch(type){
@@ -72,10 +72,20 @@ int main(){
             addRNS(first, second, N);
             break;
         case '-':
+            if(sign2 != -1 && sec > fi){
+                range = pro - sec;
+                minRange = -sec, maxRange = range;
+            }  
             subRNS(first, second, N);
             break;
         case '*':
-            if(sign == -1 || sign2 == -1) {
+            if(sign == -1 && sign2 == -1)
+            {
+                range = pro;
+                minRange = 0;
+                maxRange = pro;
+            }
+            else if(sign == -1 || sign2 == -1) {
                 range = -pro;
                 minRange = range;
                 maxRange = 0;
@@ -84,8 +94,9 @@ int main(){
             break;
     }
     long long result = toInt(first, N, pro);
-    result = result > range ? result - pro : result;
-    printf( "Produkt N: %lld\nZakres dynamiczny: <%lld, %lld>"
-            "\nDzialanie: %d %c %d = %lld\n"
+    result = result >= range ? result - pro : result;
+    printf( "Produkt N: %lld\n"
+            "Zakres dynamiczny: <%lld, %lld>\n"
+            "Dzialanie: %d %c %d = %lld\n"
             ,pro, minRange, maxRange, fi * sign, type, sec * sign2, result);
 }
